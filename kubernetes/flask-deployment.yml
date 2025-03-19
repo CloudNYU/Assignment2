@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: flask-app
 spec:
-  replicas: 1
+  replicas: 3  # Ahora manejamos las réplicas aquí
   selector:
     matchLabels:
       app: flask-app
@@ -37,4 +37,3 @@ spec:
     port: 5000
     targetPort: 5000
   type: LoadBalancer
-
