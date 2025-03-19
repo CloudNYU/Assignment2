@@ -11,6 +11,7 @@ mongodb_pass = os.environ.get('MONGO_INITDB_ROOT_PASSWORD', 'example')
 
 # Conexión con autenticación
 client = MongoClient(f"mongodb://{mongodb_user}:{mongodb_pass}@{mongodb_host}:{mongodb_port}/")
+# client = MongoClient(mongodb_host, mongodb_port)
 db = client.camp2016    #Select the database
 todos = db.todo #Select the collection
 
@@ -23,6 +24,18 @@ def redirect_url():
 	return request.args.get('next') or \
 		request.referrer or \
 		url_for('index')
+
+@app.route("/health")
+def health_check():
+    return "OK", 200
+
+# @app.route("/health")
+# def health_check():
+#     return "Error", 500 
+
+@app.route("/ready") 
+def readiness_check():
+    return "OK", 200
 
 @app.route("/list")
 def lists ():
