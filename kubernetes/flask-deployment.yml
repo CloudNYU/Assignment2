@@ -3,7 +3,12 @@ kind: Deployment
 metadata:
   name: flask-app
 spec:
-  replicas: 3  # Ahora manejamos las réplicas aquí
+  replicas: 3  # Número de réplicas
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1  # Máximo de pods que pueden estar fuera de servicio
+      maxSurge: 1        # Máximo de pods nuevos que pueden crearse antes de eliminar los antiguos
   selector:
     matchLabels:
       app: flask-app
@@ -14,7 +19,7 @@ spec:
     spec:
       containers:
       - name: flask-app
-        image: navasanti19/flask-app:latest 
+        image: navasanti19/flask-app:latest  # Imagen de Docker (versión actual)
         ports:
         - containerPort: 5000
         env:
