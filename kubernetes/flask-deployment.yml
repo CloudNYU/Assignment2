@@ -18,29 +18,29 @@ spec:
         app: flask-app
     spec:
       containers:
-      - name: flask-app
-        image: navasanti19/flask-app:latest
-        ports:
-        - containerPort: 5000
-        env:
-        - name: MONGO_HOST
-          value: "mongo-service"
-        - name: MONGO_PORT
-          value: "27017"
-        livenessProbe:  # ✅ Verifica si el contenedor está vivo
-          httpGet:
-            path: /health
-            port: 5000
-          initialDelaySeconds: 10  # Espera 10s antes de la primera verificación
-          periodSeconds: 5  # Verifica cada 5s
-          failureThreshold: 3  # Si falla 3 veces seguidas, reinicia el pod
-        readinessProbe:  # ✅ Verifica si el contenedor está listo para recibir tráfico
-          httpGet:
-            path: /ready
-            port: 5000
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          failureThreshold: 3
+        - name: flask-app
+          image: navasanti19/flask-app:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGO_HOST
+              value: "mongo-service"
+            - name: MONGO_PORT
+              value: "27017"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
 ---
 apiVersion: v1
 kind: Service
@@ -52,7 +52,7 @@ spec:
   selector:
     app: flask-app
   ports:
-  - protocol: TCP
-    port: 5000
-    targetPort: 5000
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
   type: LoadBalancer
